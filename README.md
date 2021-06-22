@@ -34,7 +34,7 @@ gcloud config set project {{project-id}}
 将 GOOGLE_CLOUD_PROJECT 设置为项目ID。
 
 ```bash
-export GOOGLE_CLOUD_PROJECT = $ (gcloud config list project --format "value (core.project)")
+export GOOGLE_CLOUD_PROJECT=$(gcloud config list project --format "value (core.project)")
 ```
 
 ### ** API 激活 **
@@ -64,7 +64,7 @@ gcloud container --project "$GOOGLE_CLOUD_PROJECT" clusters create "cluster-1" \
   --enable-autoupgrade \
   --image-type "COS" \
   --enable-ip-alias \
-  --workload-pool = $GOOGLE_CLOUD_PROJECT.svc.id.goog
+  --workload-pool=$GOOGLE_CLOUD_PROJECT.svc.id.goog
 ```
 
 创建 Kubernetes 集群需要几分钟时间。
@@ -293,7 +293,7 @@ go run *.go
 如果未设置，请将 GOOGLE_CLOUD_PROJECT 设置为项目ID。
 
 ```bash
-export GOOGLE_CLOUD_PROJECT = $ (gcloud config list project --format "value (core.project)")
+export GOOGLE_CLOUD_PROJECT=$(gcloud config list project --format "value (core.project)")
 ```
 然后运行你刚刚构建的 `player` 命令。
 
@@ -316,12 +316,12 @@ export GOOGLE_CLOUD_PROJECT = $ (gcloud config list project --format "value (cor
 
 设置环境变量并重试。
 ```bash
-export GOOGLE_CLOUD_PROJECT = $ (gcloud config list project --format "value (core.project)")
+export GOOGLE_CLOUD_PROJECT=$(gcloud config list project --format "value (core.project)")
 ```
 
 或者
 ```bash
-GOOGLE_CLOUD_PROJECT = {{project-id}} ./player
+GOOGLE_CLOUD_PROJECT={{project-id}} ./player
 ```
 
 此 Web 服务器在接受针对特定路径的 HTTP 请求时会注册、更新和删除新的玩家信息。
