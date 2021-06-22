@@ -2,8 +2,8 @@
 
 ## 谷歌云项目选择
 
-创建一个动手实验的 Google Cloud 项目，选择您的 Google Cloud 项目并点击 ** Start **。
-** 请尽量新建一个项目。**
+创建一个动手实验的 Google Cloud 项目，选择您的 Google Cloud 项目并点击 **Start**。
+**请尽量新建一个项目。**
 
 <walkthrough-project-setup>
 </walkthrough-project-setup>
