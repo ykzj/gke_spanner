@@ -715,7 +715,6 @@ curl -X DELETE http://<EXTERNAL IP>:8080/players/afceaaab-54b3-4546-baba-319fc7b
 
 ```bash
 kubectl describe <resource name> <object name>
-# 例如
 kubectl describe deployments hello-node
 ```
 
