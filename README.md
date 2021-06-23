@@ -117,7 +117,7 @@ INTERLEAVE IN PARENT players ON DELETE CASCADE;
 
 ![](https://storage.cloud.google.com/egg-resources/egg3-2/public/2-2.png)
 
-2.选择“创建实例”
+2. 选择“创建实例”
 
 ### **输入信息**
 
@@ -758,6 +758,6 @@ gcloud spanner instances delete dev-instance
 
 对于 `Do you want to continue (Y/n)?`，输入 `y`。
 
-# **谢谢你！**
+# **恭喜你！**
 
 这样就完成了Google Kubernetes Engine和Cloud Spanner的动手操作。
