@@ -1,22 +1,21 @@
-#Google Kubernetes Engine (GKE) 和 Cloud Spanner 实践
+# Google Kubernetes Engine (GKE) 和 Cloud Spanner 实践
 
 ## 谷歌云项目选择
 
-创建一个动手实验的 Google Cloud 项目，选择您的 Google Cloud 项目并点击 **Start**。
-**请尽量新建一个项目。**
+创建一个动手实验的 Google Cloud 项目，选择您的 Google Cloud 项目并点击 **Start**。请尽量新建一个项目。
 
 <walkthrough-project-setup>
 </walkthrough-project-setup>
 
 ##【解说】实操内容
 
-### ** 内容和目的 **
+### **内容和目的**
 
-在本次动手实践中，对于那些从未接触过Google Kubernetes Engine的人，我们将从创建 Kubernetes 集群开始，构建、部署和访问容器。
+在本次动手实践中，对于那些从未接触过Google Kubernetes Engine(GKE)的人，我们将从创建 Kubernetes 集群开始，构建、部署和访问容器。
 
-使用以主题访问 Cloud Spanner 的 Web 应用程序，尝试使用 Workload Identity 在没有服务帐户密钥的情况下访问 Cloud Spanner。
+通过访问Cloud Spanner数据库的Web应用程序，尝试使用Workload Identity在没有服务帐户密钥的情况下访问Cloud Spanner。
 
-通过此动手操作，目的是了解使用 Google Kubernetes Engine 进行应用程序开发的第一步。
+通过此动手操作，目的是了解使用Google Kubernetes Engine进行应用程序开发的第一步。
 
 下图显示了动手系统配置（最终配置）。
 
@@ -24,9 +23,9 @@
 
 ## 启用 Google API 并创建 Kubernetes 集群
 
-我认为 Cloud Shell 和编辑器屏幕当前已打开，但如果您尚未打开 Google Cloud Console (https://console.cloud.google.com/)，请打开控制台屏幕。请打开它。
+假设Cloud Shell和编辑器屏幕当前已打开，但如果您尚未打开 Google Cloud Console (https://console.cloud.google.com/) ，请访问链接打开Cloud Shell。
 
-### ** 设置项目使用**
+### **设置项目使用**
 ```bash
 gcloud config set project {{project-id}}
 ```
@@ -37,9 +36,9 @@ gcloud config set project {{project-id}}
 export GOOGLE_CLOUD_PROJECT=$(gcloud config list project --format "value (core.project)")
 ```
 
-### ** API 激活 **
+### **启用API**
 
-使用以下命令启用动手 Google API：
+使用以下命令启用动手Google API：
 
 ```bash
 gcloud services enable cloudbuild.googleapis.com \
@@ -53,7 +52,7 @@ gcloud services enable cloudbuild.googleapis.com \
   logging.googleapis.com
 ```
 
-### ** 创建 Kubernetes 集群 **
+### **创建 Kubernetes 集群**
 
 启用 API 后，创建 Kubernetes 集群。
 执行以下命令。
@@ -75,7 +74,7 @@ gcloud container --project "$GOOGLE_CLOUD_PROJECT" clusters create "cluster-1" \
 
 ![Schema](https://storage.googleapis.com/egg-resources/egg3/public/1-1.png "这次使用的Schema")
 
-这个表的DDL如下：等我实际建表的时候再贴一下这个DDL。
+这个表的DDL如下：等实际建表的时候再贴一下这个DDL。
 
 ```sql
 CREATE TABLE players（
@@ -107,10 +106,10 @@ INTERLEAVE IN PARENT players ON DELETE CASCADE;
 
 ## 创建一个 Cloud Spanner 实例
 
-我认为 Cloud Shell 和编辑器屏幕当前已打开，但如果您尚未打开 Google Cloud Console (https://console.cloud.google.com/)，请打开控制台屏幕。请打开它。
+假设Cloud Shell 和编辑器屏幕当前已打开，但如果您尚未打开 Google Cloud Console (https://console.cloud.google.com/) ，请点击链接打开。
 
 
-### ** 创建 Cloud Spanner 实例 **
+### **创建 Cloud Spanner 实例**
 
 ![](https://storage.googleapis.com/egg-resources/egg3/public/2-1.png)
 
@@ -120,7 +119,7 @@ INTERLEAVE IN PARENT players ON DELETE CASCADE;
 
 2.选择“创建实例”
 
-### ** 输入信息**
+### **输入信息**
 
 ![](https://storage.googleapis.com/egg-resources/egg3/public/2-3.png)
 
@@ -132,7 +131,7 @@ INTERLEAVE IN PARENT players ON DELETE CASCADE;
 5. 节点分配：1
 6. 选择“创建”
 
-### ** 实例创建完成**
+### **实例创建完成**
 将显示以下屏幕并完成创建。
 让我们看看你能看到什么样的信息。
 
@@ -140,7 +139,7 @@ INTERLEAVE IN PARENT players ON DELETE CASCADE;
 
 ## 创建一个表
 
-### ** 创建数据库 **
+### **创建数据库**
 
 由于我们只创建了 Cloud Spanner 的一个实例，因此我们将创建一个数据库和表。
 
@@ -153,13 +152,14 @@ INTERLEAVE IN PARENT players ON DELETE CASCADE;
 1. 选择dev-instnace换屏
 2. 选择创建数据库
 
-### ** 输入数据库名称 **
+### **输入数据库名称**
 
 ![](https://storage.googleapis.com/egg-resources/egg3-2/public/5-3.png)
-输入“player-db”作为名称。
+
+输入“player-db”作为名称，注意：由于代码中使用player-db作为数据库名，此处不能将数据库名设置为其他值。
 
 
-### ** 数据库架构定义 **
+### **数据库架构定义**
 
 ![](https://storage.googleapis.com/egg-resources/egg3-2/public/5-4.png)
 转至定义架构的屏幕。
@@ -191,7 +191,7 @@ INTERLEAVE IN PARENT players ON DELETE CASCADE;
 
 2. 选择创建开始创建表。
 
-### ** 数据库创建完成**
+### **数据库创建完成**
 
 ![](https://storage.googleapis.com/egg-resources/egg3-2/public/5-5.png)
 
@@ -199,7 +199,7 @@ INTERLEAVE IN PARENT players ON DELETE CASCADE;
 
 ## 准备 Cloud Spanner 连接客户端 
 
-### ** 构建一个写入 Cloud Spanner 的应用程序 **
+### **构建一个写入 Cloud Spanner 的应用程序**
 
 首先，让我们创建一个使用客户端库的 Web 应用程序。
 
@@ -207,7 +207,7 @@ INTERLEAVE IN PARENT players ON DELETE CASCADE;
 有一个名为 spanner 的目录，因此请移至该目录。
 
 ```bash
-cd spanner
+cd ~/gke_spanner/spanner
 ```
 
 让我们检查一下目录的内容。
@@ -216,7 +216,7 @@ cd spanner
 ls -la
 ```
 
-您将找到名为“main.go”和“pkg/”的文件和目录。
+您将找到名为“main.go”的文件。
 您还可以在 Cloud Shell 编辑器中看到这一点。
 
 让我们从编辑器中打开 `spanner/main.go` 并检查内容。
@@ -229,7 +229,7 @@ cloudshell edit main.go
 
 此应用程序是用于在我们这次创建的游戏中注册新用户的应用程序。
 执行后，Web 服务器将启动。
-当您向 Web 服务器发送 HTTP 请求时，用户 ID 会自动编号，并将新用户信息写入 Cloud Spanner 播放器表。
+当您向 Web 服务器发送HTTP请求时，用户ID会自动编号，并将新用户信息写入Cloud Spanner用户表。
 
 下面的代码是实际执行此操作的部分。
 
@@ -260,17 +260,17 @@ func (h *spanHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 ```
 
-接下来，让我们构建用这种 Go 语言编写的源代码。
+接下来，让我们编译Go语言编写的源代码。
 
-然后使用以下命令构建。在第一次构建时，会下载依赖库，因此需要一些时间。
-下载和构建将在大约 1 分钟内完成。
+使用以下命令构建。在第一次构建时，会下载依赖库，因此需要一些时间。
+下载和构建将在大约1分钟内完成。
 
 ```bash
 go build -o player
 ```
 
 让我们检查是否有构建的二进制文件。
-您应该已经创建了一个名为“player”的二进制文件。您现在有一个连接到 Cloud Spanner 并写入的应用程序。
+您应该已经创建了一个名为“player”的二进制文件。您现在有一个连接到Cloud Spanner，并可进行读写查询(CRUD)操作的应用程序。
 
 ```bash
 ls -la
@@ -288,7 +288,7 @@ go run *.go
 
 ## 写入数据：应用程序
 
-### ** 从 Web 应用程序添加玩家数据 **
+### **从Web应用程序添加玩家数据**
 
 如果未设置，请将 GOOGLE_CLOUD_PROJECT 设置为项目ID。
 
@@ -324,9 +324,9 @@ export GOOGLE_CLOUD_PROJECT=$(gcloud config list project --format "value (core.p
 GOOGLE_CLOUD_PROJECT={{project-id}} ./player
 ```
 
-此 Web 服务器在接受针对特定路径的 HTTP 请求时会注册、更新和删除新的玩家信息。
-现在让我们向 Web 服务器发送创建新玩家的请求。
-在与运行“player”的控制台不同的选项卡中，使用以下命令发送 HTTP POST 请求。
+此Web服务器在接受针对特定路径的HTTP请求时会注册、更新和删除新的玩家信息。
+现在让我们向Web服务器发送创建新玩家的请求。
+在与运行`player`的控制台不同的选项卡中，使用以下命令发送HTTP POST请求。
 
 ```bash
 curl -X POST -d '{"name": "testPlayer1", "level": 1, "money": 100}' localhost:8080/players
@@ -342,19 +342,19 @@ A new Player with the ID 78120943-5b8e-4049-acf3-b6e070d017ea has been added!
 这个ID (`78120943-5b8e-4049-acf3-b6e070d017ea`) 是应用程序自动生成的用户 ID，从数据库的角度来看，它是玩家表的主键。
 记下手头生成的 ID，因为它将在后续练习中使用。
 
-##检查GKE集群创建是否完成
+## 检查GKE集群创建是否完成
 
 ### 检查图形用户界面
 
-创建 Kubernetes 集群后，您可以在 Management Console-Kubernetes Engine-Clusters 中看到它。
+创建Kubernetes集群后，您可以在Management Console->Kubernetes Engine-Clusters 中看到它。
 
 ![](https://storage.googleapis.com/egg-resources/egg3-2/public/gke/1-1.png)
 
-通过创建 Kubernetes 集群，当前系统配置如下所示：
+通过创建Kubernetes集群，当前系统配置如下所示：
 
 ![](https://storage.googleapis.com/egg-resources/egg3-2/public/gke/1-2.png)
 
-### ** 命令设置 **
+### **命令设置**
 
 执行以下命令，设置命令执行环境。
 
@@ -365,7 +365,7 @@ gcloud config set container/cluster cluster-1
 gcloud container clusters get-credentials cluster-1
 ```
 
-上述命令中的以下命令带来了本地操作 Kubernetes 集群（Cloud Shell）所需的凭据。
+上述命令中的以下命令带来了本地操作Kubernetes集群（Cloud Shell）所需的凭据。
 
 ```bash
 gcloud container clusters get-credentials cluster-1
@@ -392,8 +392,8 @@ Server Version: version.Info{Major:"1", Minor:"19+", GitVersion:"v1.19.9-gke.190
 
 ### **构建 Docker 容器镜像**
 
-创建 Docker 容器镜像时，准备一个 Dockerfile。
-Dockerfile 存储在 spanner 目录中。
+创建Docker容器镜像时，准备一个Dockerfile。
+Dockerfile存储在spanner目录中。
 
 ```bash
 cd ~/gke_spanner
@@ -438,7 +438,7 @@ asia.gcr.io/<GOOGLE_CLOUD_PROJECT>/spanner-app   v1   8952a9a242f5   5 minutes a
 gcloud auth configure-docker
 ```
 
-使用以下命令推送到 Google Container Registry：
+使用以下命令推送到Google Container Registry：
 （第一次需要时间）
 
 ```bash
@@ -537,14 +537,14 @@ kubectl annotate serviceaccount spanner-app \
 
 ### **编辑部署清单文件** 
 
-清单文件存储在 k8s 目录中。
+清单文件存储在`k8s`目录中。
 您可以使用以下命令在 Cloud Shell 编辑器中检查文件的内容。
 
 ```bash
 cloudshell edit k8s/spanner-app-deployment.yaml
 ```
 
-**将文件中的项目id改为自己的{{project-id}}**
+**将文件中的项目id改为您的项目id：{{project-id}}**
 
 ![](https://storage.googleapis.com/egg-resources/egg3-2/public/gke/3-1.png)
 
@@ -632,8 +632,7 @@ kubectl get svc -w
 kubectl get services
 ```
 
- * 当您想知道 Service 将通信路由到的 pod (IP) 时
- * 端点资源由服务资源自动管理
+ * 当您想知道 Service 将通信路由到的 pod (IP) 时，端点资源由服务资源自动管理
 ```bash
 kubectl get endpoints
 ```
@@ -698,7 +697,7 @@ curl -X POST -d '{"name": "testPlayer99", "level": 9, "money": 10000}' <EXTERNAL
 curl <EXTERNAL IP>:8080/players
 ```
 
- * 播放器更新（playerId 应相应更改）
+ * 用户信息更新（playerId 应相应更改）
 ```bash
 curl -X PUT -d '{"playerId":"afceaaab-54b3-4546-baba-319fc7b2b5b0","name": "testPlayer1", "level": 2, "money": 200}' <EXTERNAL IP>:8080/players
 ```
@@ -715,7 +714,6 @@ curl -X DELETE http://<EXTERNAL IP>:8080/players/afceaaab-54b3-4546-baba-319fc7b
 
 ```bash
 kubectl describe <resource name> <object name>
-kubectl describe deployments hello-node
 ```
 
 此外，请检查应用程序日志以查看应用程序中是否存在任何错误。
@@ -725,7 +723,7 @@ kubectl describe deployments hello-node
 kubectl logs -f <pod name>
 ```
 
-＃ 清理
+# 清理
 
 做完所有的练习，删除资源。
 
@@ -736,7 +734,7 @@ kubectl delete svc spanner-app
 
  2. 删除Container Registry中存储的Docker镜像
 ```bash
-gcloud container images delete asia.gcr.io/$PROJECT_ID/spanner-app:v1 --quiet
+gcloud container images delete asia.gcr.io/$GOOGLE_CLOUD_PROJECT/spanner-app:v1 --quiet
 ```
 
  3. 删除Kubernetes集群
@@ -760,6 +758,6 @@ gcloud spanner instances delete dev-instance
 
 对于 `Do you want to continue (Y/n)?`，输入 `y`。
 
-＃**谢谢你！**
+# **谢谢你！**
 
-这样就完成了 Google Kubernetes Engine 和 Cloud Spanner 的动手操作。
+这样就完成了Google Kubernetes Engine和Cloud Spanner的动手操作。
