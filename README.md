@@ -63,6 +63,7 @@ gcloud container --project "$GOOGLE_CLOUD_PROJECT" clusters create "cluster-1" \
   --enable-autoupgrade \
   --image-type "COS" \
   --enable-ip-alias \
+  --release-channel=stable \
   --workload-pool=$GOOGLE_CLOUD_PROJECT.svc.id.goog
 ```
 
@@ -124,12 +125,12 @@ INTERLEAVE IN PARENT players ON DELETE CASCADE;
 ![](https://storage.googleapis.com/egg-resources/egg3/public/2-3.png)
 
 设置以下内容并选择“创建”。
-1. 实例名称：dev-instance
-2. 实例ID：dev-instance
-3. 选择“地区”
-4. 选择“asia-northeast1（东京）”
-5. 节点分配：1
-6. 选择“创建”
+1. 实例名称：`dev-instance`
+2. 实例ID：`dev-instance`
+3. 选择`Regional(地区)`
+4. 选择`asia-northeast1（东京）`
+5. 节点分配：`1`
+6. 选择`创建`
 
 ### **实例创建完成**
 将显示以下屏幕并完成创建。
@@ -156,7 +157,7 @@ INTERLEAVE IN PARENT players ON DELETE CASCADE;
 
 ![](https://storage.googleapis.com/egg-resources/egg3-2/public/5-3.png)
 
-输入“player-db”作为名称，注意：由于代码中使用player-db作为数据库名，此处不能将数据库名设置为其他值。
+输入`player-db`作为名称，注意：由于代码中使用player-db作为数据库名，此处不能将数据库名设置为其他值。
 
 
 ### **数据库架构定义**
@@ -276,7 +277,7 @@ go build -o player
 ls -la
 ```
 
-** 附录）如何在不构建的情况下运行二进制文件 **
+**附录）如何在不构建的情况下运行二进制文件**
 
 您还可以使用以下命令在不构建二进制文件的情况下运行应用程序：
 
